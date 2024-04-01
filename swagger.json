@@ -1,0 +1,130 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Swagger Petstore - OpenAPI 3.0",
+    "description": "Webform submission data retrieval based on the OpenAPI 3.0 specification.",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "https://test.worldcampus.psu.edu/api/v1/crm_export"
+    },
+    {
+      "url": "https://www.worldcampus.psu.edu/api/v1/crm_export"
+    }
+  ],
+  "paths": {
+    "/webform": {
+      "get": {
+        "summary": "Retrieve webform submissions",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "getWebformSubmissions",
+        "parameters": [
+          {
+            "name": "last_id",
+            "in": "query",
+            "description": "The ID of the last successfully retrieved submission.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing last_id value."
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Submission": {
+        "required": [
+          "id",
+          "webform_id",
+          "time"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "webform_id": {
+            "type": "string",
+            "example": "rfi_general_form"
+          },
+          "time": {
+            "type": "string",
+            "example": "2024-03-29 10:11:30"
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        },
+        "xml": {
+          "name": "webform"
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Submission"
+            }
+          }
+        },
+        "xml": {
+          "name": "##default"
+        }
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ]
+}
