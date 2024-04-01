@@ -36,6 +36,16 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "form_fields",
+            "in": "query",
+            "description": "An optional semicolon delimited list of form fields that if present in a submission, will cause the submission to be included in the response.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "webform_type_rfi;first_name;last_name"
           }
         ],
         "responses": {
