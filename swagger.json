@@ -11,14 +11,14 @@
   },
   "servers": [
     {
-      "url": "https://test.worldcampus.psu.edu/api/v1/crm_export"
+      "url": "https://test.worldcampus.psu.edu/api"
     },
     {
-      "url": "https://www.worldcampus.psu.edu/api/v1/crm_export"
+      "url": "https://www.worldcampus.psu.edu/api"
     }
   ],
   "paths": {
-    "/webform": {
+    "/v1/crm_export/webform": {
       "get": {
         "summary": "Retrieve webform submissions",
         "description": "Retrieve webform submissions by last ID and optionally by fields present on the submission.",
