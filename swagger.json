@@ -40,7 +40,7 @@
           {
             "name": "form_fields",
             "in": "query",
-            "description": "An optional semicolon delimited list of form fields that if present in a submission, will cause the submission to be included in the response.",
+            "description": "An optional semicolon delimited list of form fields that if all are present in a submission, will cause the submission to be included in the response.",
             "required": false,
             "schema": {
               "type": "string"
