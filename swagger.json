@@ -21,7 +21,7 @@
     "/webform": {
       "get": {
         "summary": "Retrieve webform submissions",
-        "description": "Multiple status values can be provided with comma separated strings",
+        "description": "Retrieve webform submissions by last ID and optionally by fields present on the submission.",
         "operationId": "getWebformSubmissions",
         "tags": [
           "Webform submissions"
