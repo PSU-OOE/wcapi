@@ -55,6 +55,9 @@
               "application/xml": {
                 "schema": {
                   "type": "array",
+                  "xml": {
+                    "name": "response"
+                  },
                   "items": {
                     "$ref": "#/components/schemas/ApiResponse"
                   }
@@ -93,6 +96,10 @@
             "type": "string",
             "example": "rfi_general_form"
           },
+          "webform_url": {
+            "type": "uri",
+            "example": "https://www.worldcampus.psu.edu/act48"
+          },
           "time": {
             "type": "string",
             "example": "2024-03-29 10:11:30"
@@ -102,7 +109,7 @@
           "type": "string"
         },
         "xml": {
-          "name": "webform"
+          "name": "sub"
         }
       },
       "ApiResponse": {
@@ -116,7 +123,7 @@
           }
         },
         "xml": {
-          "name": "##default"
+          "name": "response"
         }
       }
     },
