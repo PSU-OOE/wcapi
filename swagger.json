@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "World Campus API",
-    "description": "API endpoints for World Campus.",
+    "description": "API endpoints for World Campus. Note - we DO NOT support general cross-origin calls to these endpoints.",
     "contact": {
       "name": "Support",
       "url": "https://github.com/PSU-OOE/wcapi/issues"
