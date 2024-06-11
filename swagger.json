@@ -20,7 +20,7 @@
   "paths": {
     "/v1/crm_export/webform": {
       "get": {
-        "summary": "Retrieve webform submissions",
+        "summary": "Retrieve webform submissions (Talend Endpoint)",
         "description": "Retrieve webform submissions by last ID and optionally by fields present on the submission.",
         "operationId": "getWebformSubmissions",
         "tags": [
@@ -67,6 +67,73 @@
           },
           "400": {
             "description": "Invalid or missing last_id value."
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/v2/crm_export/webform": {
+      "get": {
+        "summary": "Retrieve webform submissions (Informatica Endpoint)",
+        "description": "Retrieve webform submissions by last ID and optionally by fields present on the submission.",
+        "operationId": "getWebformSubmissions",
+        "tags": [
+          "Webform submissions"
+        ],
+        "parameters": [
+          {
+            "name": "last_id",
+            "in": "query",
+            "description": "The ID of the last successfully retrieved submission.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "sub_limit",
+            "in": "query",
+            "description": "The maximum number of submissions that can be retrieved by this call.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },          {
+            "name": "form_fields",
+            "in": "query",
+            "description": "An optional semicolon delimited list of form fields that if all are present in a submission, will cause the submission to be included in the response. Note that the special 'webform_type_*' field may be used to filter by category.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "webform_type_rfi;first_name;last_name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "xml": {
+                    "name": "response"
+                  },
+                  "items": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing last_id value or sub_limit is provided, but not a positive integer."
           }
         },
         "security": [
