@@ -22,7 +22,7 @@
       "get": {
         "summary": "Retrieve webform submissions (Talend Endpoint)",
         "description": "Retrieve webform submissions by last ID and optionally by fields present on the submission.",
-        "operationId": "getWebformSubmissions",
+        "operationId": "getWebformSubmissionsTalend",
         "tags": [
           "Webform submissions"
         ],
@@ -80,7 +80,7 @@
       "get": {
         "summary": "Retrieve webform submissions (Informatica Endpoint)",
         "description": "Retrieve webform submissions by last ID and optionally by fields present on the submission.",
-        "operationId": "getWebformSubmissions",
+        "operationId": "getWebformSubmissionsInformatica",
         "tags": [
           "Webform submissions"
         ],
