@@ -98,8 +98,8 @@
           {
             "name": "sub_limit",
             "in": "query",
-            "description": "The maximum number of submissions that can be retrieved by this call.",
-            "required": true,
+            "description": "The maximum number of submissions that can be retrieved by this call. If not specified, umlimited data may be retrieved.",
+            "required": false,
             "explode": true,
             "schema": {
               "type": "integer"
