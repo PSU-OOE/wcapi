@@ -193,7 +193,7 @@
                 "schema": {
                   "type": "array",
                   "xml": {
-                    "name": "Response"
+                    "name": "response"
                   },
                   "items": {
                     "$ref": "#/components/schemas/WebinarSuccessResponse"
@@ -209,7 +209,7 @@
                 "schema": {
                   "type": "array",
                   "xml": {
-                    "name": "Response"
+                    "name": "response"
                   },
                   "items": {
                     "$ref": "#/components/schemas/WebinarErrorResponse"
