@@ -144,7 +144,7 @@
         ]
       }
     },
-    "/v1/ecrm_import/webinars": {
+    "/v2/crm_import/webinars": {
       "post": {
         "summary": "Create Webinar content",
         "description": "This endpoint creates content within Drupal *and* within the On24 vendor platform. *Note - webinars will NOT be created within the On24 vendor platform except on the production endpoint!*",
