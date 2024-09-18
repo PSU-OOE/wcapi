@@ -104,7 +104,8 @@
             "schema": {
               "type": "integer"
             }
-          },          {
+          },
+          {
             "name": "form_fields",
             "in": "query",
             "description": "An optional semicolon delimited list of form fields that if all are present in a submission, will cause the submission to be included in the response. Note that the special 'webform_type_*' field may be used to filter by category.",
@@ -142,6 +143,83 @@
           }
         ]
       }
+    },
+    "/v1/ecrm_import/webinars": {
+      "post": {
+        "summary": "Create Webinar content",
+        "description": "This endpoint creates content within Drupal *and* within the On24 vendor platform.",
+        "operationId": "importWebinars",
+        "tags": [
+          "Webinars"
+        ],
+        "parameters": [
+          {
+            "name": "should_fail",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "in": "query",
+            "description": "A flag that can be used in preproduction environments to simulate success or failure within the On24 vendor platform.  **This flag is NOT respected in the production environment!**"
+          }
+        ],
+        "requestBody": {
+          "description": "The webinars to create.",
+          "required": true,
+          "content": {
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "xml": {
+                  "name": "webinars"
+                },
+                "properties": {
+                  "webinars": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Webinar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "xml": {
+                    "name": "Response"
+                  },
+                  "items": {
+                    "$ref": "#/components/schemas/WebinarSuccessResponse"
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "failed operation or partially failed operation",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "xml": {
+                    "name": "Response"
+                  },
+                  "items": {
+                    "$ref": "#/components/schemas/WebinarErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -164,7 +242,7 @@
             "example": "rfi_general_form"
           },
           "webform_url": {
-            "type": "uri",
+            "type": "string",
             "example": "https://www.worldcampus.psu.edu/act48"
           },
           "time": {
@@ -191,6 +269,97 @@
         },
         "xml": {
           "name": "response"
+        }
+      },
+      "WebinarSuccessResponse": {
+        "type": "object",
+        "description": "The response format for when a successful webinar batch creation process finishes.",
+        "properties": {
+          "success": {
+            "type": "integer",
+            "example": 1
+          }
+        }
+      },
+      "WebinarErrorResponse": {
+        "type": "object",
+        "description": "The response format for when any application failures occur in any systems during the webinar batch creation process.",
+        "properties": {
+          "success": {
+            "type": "integer",
+            "example": 0
+          },
+          "error": {
+            "type": "string",
+            "example": "This is a mock failure.(CRM ID: 8675309)"
+          }
+        }
+      },
+      "Webinar": {
+        "type": "object",
+        "description": "The minimum set of information required to provision a webinar within the Drupal and On24 systems.",
+        "required": [
+          "crm_id",
+          "start_date",
+          "end_date",
+          "on24_template_id",
+          "webform_id",
+          "title"
+        ],
+        "properties": {
+          "crm_id": {
+            "type": "integer",
+            "description": "A unique identifier that denotes this webinar instance within the CRM system.",
+            "xml": {
+              "attribute": true
+            },
+            "example": 1000
+          },
+          "start_date": {
+            "type": "string",
+            "description": "The ISO 8601 start date/time of the webinar.",
+            "xml": {
+              "attribute": true
+            },
+            "format": "date-time",
+            "example": "2037-07-26T00:00:00.000Z"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "The ISO 8601 end date/time of the webinar.",
+            "xml": {
+              "attribute": true
+            },
+            "format": "date-time",
+            "example": "2037-07-26T00:00:00.000Z"
+          },
+          "on24_template_id": {
+            "type": "integer",
+            "description": "The ID of the On24 webinar template to duplicate.",
+            "xml": {
+              "attribute": true
+            },
+            "example": 1000
+          },
+          "webform_id": {
+            "type": "string",
+            "description": "The ID of the registration webform for the webinar.",
+            "xml": {
+              "attribute": true
+            },
+            "example": "on24_uga_career_svcs_spotlight"
+          },
+          "title": {
+            "type": "string",
+            "description": "The end-user facing name of the webinar.",
+            "example": "Career Services Spotlight",
+            "xml": {
+              "attribute": true
+            }
+          }
+        },
+        "xml": {
+          "name": "webinar"
         }
       }
     },
