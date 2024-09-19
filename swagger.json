@@ -156,8 +156,12 @@
           {
             "name": "should_fail",
             "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "default": 0
             },
             "in": "query",
             "description": "A flag that can be used in preproduction environments to simulate success or failure within the On24 vendor platform.  **This flag is NOT respected in the production environment!**"
