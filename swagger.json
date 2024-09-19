@@ -326,7 +326,7 @@
               "attribute": true
             },
             "format": "date-time",
-            "example": "2037-07-26T00:00:00.000Z"
+            "example": "2037-07-26T00:00:00Z"
           },
           "end_date": {
             "type": "string",
@@ -335,7 +335,7 @@
               "attribute": true
             },
             "format": "date-time",
-            "example": "2037-07-26T00:00:00.000Z"
+            "example": "2037-07-26T00:00:00Z"
           },
           "on24_template_id": {
             "type": "integer",
