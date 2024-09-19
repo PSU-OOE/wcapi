@@ -7,7 +7,7 @@
       "name": "Support",
       "url": "https://github.com/PSU-OOE/wcapi/issues"
     },
-    "version": "1.2.0"
+    "version": "1.3.0"
   },
   "servers": [
     {
@@ -224,6 +224,170 @@
           }
         }
       }
+    },
+    "/v2/crm_import": {
+      "post": {
+        "summary": "Synchronize reference data",
+        "description": "This endpoint synchronizes various data sets between the CRM and the Drupal application.",
+        "operationId": "crmImport",
+        "tags": [
+          "Reference Data Synchronization"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful import operation or partially successful import operation",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "xml": {
+                    "name": "response"
+                  },
+                  "items": {
+                    "$ref": "#/components/schemas/ReferenceDataSuccessResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "The new data.",
+          "required": true,
+          "content": {
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "xml": {
+                  "name": "reference_data"
+                },
+                "properties": {
+                  "countries": {
+                    "type": "array",
+                    "xml": {
+                      "name": "countries",
+                      "wrapped": true
+                    },
+                    "items": {
+                      "xml": {
+                        "name": "country"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Country"
+                      }
+                    }
+                  },
+                  "states": {
+                    "type": "array",
+                    "xml": {
+                      "name": "states",
+                      "wrapped": true
+                    },
+                    "items": {
+                      "xml": {
+                        "name": "state"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/State"
+                      }
+                    }
+                  },
+                  "topics": {
+                    "type": "array",
+                    "xml": {
+                      "name": "topics",
+                      "wrapped": true
+                    },
+                    "items": {
+                      "xml": {
+                        "name": "topic"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Topic"
+                      }
+                    }
+                  },
+                  "programs": {
+                    "type": "array",
+                    "xml": {
+                      "name": "programs",
+                      "wrapped": true
+                    },
+                    "items": {
+                      "xml": {
+                        "name": "program"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Program"
+                      }
+                    }
+                  },
+                  "programs_parents_children": {
+                    "type": "array",
+                    "xml": {
+                      "name": "programs_parents_children",
+                      "wrapped": true
+                    },
+                    "items": {
+                      "xml": {
+                        "name": "prog_parent_child"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Prog_Parent_Child"
+                      }
+                    }
+                  },
+                  "military_branches": {
+                    "type": "array",
+                    "xml": {
+                      "name": "military_branches",
+                      "wrapped": true
+                    },
+                    "items": {
+                      "xml": {
+                        "name": "military_branch"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Military_Branch"
+                      }
+                    }
+                  },
+                  "military_statuses": {
+                    "type": "array",
+                    "xml": {
+                      "name": "military_statuses",
+                      "wrapped": true
+                    },
+                    "items": {
+                      "xml": {
+                        "name": "military_status"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Military_Status"
+                      }
+                    }
+                  },
+                  "b2b_partners": {
+                    "type": "array",
+                    "xml": {
+                      "name": "b2b_partners",
+                      "wrapped": true
+                    },
+                    "items": {
+                      "xml": {
+                        "name": "b2b_partner"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/B2b_Partner"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -299,6 +463,16 @@
           }
         }
       },
+      "ReferenceDataSuccessResponse": {
+        "type": "object",
+        "description": "The response format for when a successful reference data synchronization finishes.",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "You have successfully accessed crm_import! Saved data: countries, states, topics, programs, programs_parents_children, military_branches, military_statuses, b2b_partners. Ignored data: terms, programs_terms."
+          }
+        }
+      },
       "Webinar": {
         "type": "object",
         "description": "The minimum set of information required to provision a webinar within the Drupal and On24 systems.",
@@ -313,7 +487,9 @@
         "properties": {
           "crm_id": {
             "type": "integer",
+            "format": "int64",
             "description": "A unique identifier that denotes this webinar instance within the CRM system.",
+            "minimum": 0,
             "xml": {
               "attribute": true
             },
@@ -321,7 +497,7 @@
           },
           "start_date": {
             "type": "string",
-            "description": "The ISO 8601 start date/time of the webinar.",
+            "description": "The ISO 8601 start date/time of the webinar. *Special note - `time-secfrac` is NOT SUPPORTED*",
             "xml": {
               "attribute": true
             },
@@ -330,7 +506,7 @@
           },
           "end_date": {
             "type": "string",
-            "description": "The ISO 8601 end date/time of the webinar.",
+            "description": "The ISO 8601 end date/time of the webinar. *Special note - `time-secfrac` is NOT SUPPORTED*",
             "xml": {
               "attribute": true
             },
@@ -339,6 +515,7 @@
           },
           "on24_template_id": {
             "type": "integer",
+            "format": "int64",
             "description": "The ID of the On24 webinar template to duplicate.",
             "xml": {
               "attribute": true
@@ -348,6 +525,7 @@
           "webform_id": {
             "type": "string",
             "description": "The ID of the registration webform for the webinar.",
+            "maxLength": 255,
             "xml": {
               "attribute": true
             },
@@ -356,6 +534,7 @@
           "title": {
             "type": "string",
             "description": "The end-user facing name of the webinar.",
+            "maxLength": 255,
             "example": "Career Services Spotlight",
             "xml": {
               "attribute": true
@@ -364,6 +543,432 @@
         },
         "xml": {
           "name": "webinar"
+        }
+      },
+      "Country": {
+        "type": "object",
+        "description": "A country.",
+        "required": [
+          "code",
+          "two_char_code",
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The end-user facing title of the country.",
+            "xml": {
+              "attribute": true
+            },
+            "maxLength": 255,
+            "example": "United States of America"
+          },
+          "code": {
+            "type": "string",
+            "description": "An arbitrary code for the country.  *This is not necessarily an ISO-3166-1 alpha-3 code!*",
+            "xml": {
+              "attribute": true
+            },
+            "maxLength": 255,
+            "example": "USA"
+          },
+          "two_char_code": {
+            "type": "string",
+            "description": "An arbitrary code for the country. *This is not necessarily an ISO-3166-1 alpha-2 code!*",
+            "xml": {
+              "attribute": true
+            },
+            "maxLength": 255,
+            "example": "US"
+          }
+        }
+      },
+      "State": {
+        "type": "object",
+        "description": "A state in the United States.",
+        "required": [
+          "title",
+          "code"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The end-user facing title of the state. *This is not necessarily an ISO-3166-2:US subdivision name!*",
+            "xml": {
+              "attribute": true
+            },
+            "maxLength": 255,
+            "example": "Pennsylvania"
+          },
+          "code": {
+            "type": "string",
+            "description": "An arbitrary code for the state.  *This is not necessarily an ISO-3166-2:US code!*",
+            "xml": {
+              "attribute": true
+            },
+            "maxLength": 255,
+            "example": "PA"
+          }
+        }
+      },
+      "Military_Status": {
+        "type": "object",
+        "description": "A status of US military service.",
+        "required": [
+          "title",
+          "code",
+          "display_branch",
+          "ordr"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The end-user facing title of the military status.",
+            "maxLength": 255,
+            "example": "Active Duty",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "code": {
+            "type": "string",
+            "description": "An arbitrary code for the military status.",
+            "maxLength": 255,
+            "example": "Active Duty",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "display_branch": {
+            "type": "string",
+            "description": "A flag that denotes whether a military branch data point is required to be collected with the status.",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "example": "Yes",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "ordr": {
+            "type": "integer",
+            "description": "Determines the sort order of the military status on the website front-end. Lower values appear higher in lists.",
+            "format": "int64",
+            "minimum": 0,
+            "example": 0,
+            "xml": {
+              "attribute": true
+            }
+          }
+        }
+      },
+      "Military_Branch": {
+        "type": "object",
+        "description": "A branch of the US Military.",
+        "required": [
+          "title",
+          "code",
+          "ordr"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The end-user facing title of the military branch.",
+            "maxLength": 255,
+            "example": "Army",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "code": {
+            "type": "string",
+            "description": "An arbitrary code for the military branch.",
+            "maxLength": 255,
+            "example": "Army",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "ordr": {
+            "type": "integer",
+            "description": "Determines the sort order of the military branch on the website front-end. Lower values appear higher in lists.",
+            "format": "int64",
+            "minimum": 0,
+            "example": 0,
+            "xml": {
+              "attribute": true
+            }
+          }
+        }
+      },
+      "B2b_Partner": {
+        "type": "object",
+        "description": "A b2b partner.",
+        "required": [
+          "title",
+          "code"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The end-user facing title of the b2b partner.",
+            "maxLength": 255,
+            "example": "XPO Logistics",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "code": {
+            "type": "string",
+            "description": "An arbitrary code for the b2b partner.",
+            "maxLength": 255,
+            "example": "XPO Logistics",
+            "xml": {
+              "attribute": true
+            }
+          }
+        }
+      },
+      "Program": {
+        "type": "object",
+        "description": "A single academic program offering.",
+        "required": [
+          "title",
+          "code",
+          "send_itk",
+          "spring_start_date",
+          "spring_deadline",
+          "spring_early_deadline",
+          "spring_deadline_extended",
+          "summer_start_date",
+          "summer_deadline",
+          "summer_early_deadline",
+          "summer_deadline_extended",
+          "fall_start_date",
+          "fall_deadline",
+          "fall_early_deadline",
+          "fall_deadline_extended",
+          "visible_semester_deadlines",
+          "hide_deadline"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The end-user facing title of the program.",
+            "maxLength": 255,
+            "example": "Applied Statistics (Master's Degree)",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "code": {
+            "type": "string",
+            "description": "An arbitrary code for the program.",
+            "maxLength": 255,
+            "example": "ASTAT",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "send_itk": {
+            "type": "string",
+            "description": "A flag denoting whether information requests for the program will be shared with the Inside Track partner.",
+            "enum": [
+              "Yes",
+              "No"
+            ]
+          },
+          "spring_start_date": {
+            "type": "string",
+            "description": "The MySQL formatted date-time of the spring semester start.",
+            "format": "date-time",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "spring_deadline": {
+            "type": "string",
+            "description": "The MySQL formatted date-time of the spring semester application deadline.",
+            "format": "date-time",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "spring_early_deadline": {
+            "type": "string",
+            "description": "The MySQL formatted date-time of the spring semester application early deadline.",
+            "format": "date-time",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "spring_deadline_extended": {
+            "type": "string",
+            "description": "A flag denoting whether the spring deadline has been extended.",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "xml": {
+              "attribute": true
+            }
+          },
+          "summer_start_date": {
+            "type": "string",
+            "description": "The MySQL formatted date-time of the summer semester start.",
+            "format": "date-time",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "summer_deadline": {
+            "type": "string",
+            "description": "The MySQL formatted date-time of the summer semester application deadline.",
+            "format": "date-time",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "summer_early_deadline": {
+            "type": "string",
+            "description": "The MySQL formatted date-time of the summer semester application early deadline.",
+            "format": "date-time",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "summer_deadline_extended": {
+            "type": "string",
+            "description": "A flag denoting whether the summer deadline has been extended.",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "xml": {
+              "attribute": true
+            }
+          },
+          "fall_start_date": {
+            "type": "string",
+            "description": "The MySQL formatted date-time of the fall semester start.",
+            "format": "date-time",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "fall_deadline": {
+            "type": "string",
+            "description": "The MySQL formatted date-time of the fall semester application deadline.",
+            "format": "date-time",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "fall_early_deadline": {
+            "type": "string",
+            "description": "The MySQL formatted date-time of the fall semester application early deadline.",
+            "format": "date-time",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "fall_deadline_extended": {
+            "type": "string",
+            "description": "A flag denoting whether the fall deadline has been extended.",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "xml": {
+              "attribute": true
+            }
+          },
+          "visible_semester_deadlines": {
+            "type": "integer",
+            "description": "The number of deadlines that should be visible for the program.",
+            "format": "int64",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "hide_deadline": {
+            "type": "string",
+            "description": "A flag denoting whether all deadline information should be hidden for the program.",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "xml": {
+              "attribute": true
+            }
+          }
+        }
+      },
+      "Topic": {
+        "type": "object",
+        "description": "A broad field of study.",
+        "required": [
+          "title",
+          "code",
+          "default_topic"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The end-user facing title of the topic.",
+            "maxLength": 255,
+            "example": "Campaign - Design",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "code": {
+            "type": "string",
+            "description": "An arbitrary code for the topic.",
+            "maxLength": 255,
+            "example": "RFI_CAMP_TOPIC_DESIGN",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "default_topic": {
+            "type": "string",
+            "description": "A flag denoting whether the topic should be listed as a default topic.",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "xml": {
+              "attribute": true
+            }
+          }
+        }
+      },
+      "Prog_Parent_Child": {
+        "type": "object",
+        "description": "A relationship that sorts programs by topic.",
+        "required": [
+          "parent_code",
+          "child_code"
+        ],
+        "properties": {
+          "parent_code": {
+            "type": "string",
+            "description": "The topic code of the relationship.",
+            "maxLength": 255,
+            "xml": {
+              "attribute": true
+            }
+          },
+          "child_code": {
+            "type": "string",
+            "description": "The program code of the relationship.",
+            "maxLength": 255,
+            "xml": {
+              "attribute": true
+            }
+          }
         }
       }
     },
