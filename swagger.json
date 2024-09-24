@@ -314,52 +314,34 @@
           "crm_id": {
             "type": "integer",
             "description": "A unique identifier that denotes this webinar instance within the CRM system.",
-            "xml": {
-              "attribute": true
-            },
             "example": 1000
           },
           "start_date": {
             "type": "string",
             "description": "The ISO 8601 start date/time of the webinar.",
-            "xml": {
-              "attribute": true
-            },
             "format": "date-time",
             "example": "2037-07-26T00:00:00Z"
           },
           "end_date": {
             "type": "string",
             "description": "The ISO 8601 end date/time of the webinar.",
-            "xml": {
-              "attribute": true
-            },
             "format": "date-time",
             "example": "2037-07-26T00:00:00Z"
           },
           "on24_template_id": {
             "type": "integer",
             "description": "The ID of the On24 webinar template to duplicate.",
-            "xml": {
-              "attribute": true
-            },
             "example": 1000
           },
           "webform_id": {
             "type": "string",
             "description": "The ID of the registration webform for the webinar.",
-            "xml": {
-              "attribute": true
-            },
             "example": "on24_uga_career_svcs_spotlight"
           },
           "title": {
             "type": "string",
             "description": "The end-user facing name of the webinar.",
-            "example": "Career Services Spotlight",
-            "xml": {
-              "attribute": true
-            }
+            "example": "Career Services Spotlight"
           }
         },
         "xml": {
